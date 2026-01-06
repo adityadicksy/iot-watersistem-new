@@ -54,7 +54,7 @@
 
     <nav class="navbar navbar-dark bg-primary mb-5">
         <div class="container">
-            <span class="navbar-brand mb-0 h1">🌊 Sistem Monitoring Air & Garam</span>
+            <span class="navbar-brand mb-0 h1">ðŸŒŠ Sistem Monitoring Air & Garam</span>
         </div>
     </nav>
 
@@ -63,7 +63,7 @@
 
             <div class="col-md-4 mb-4">
                 <div class="card card-sensor p-4">
-                    <div class="icon-box">🧂</div>
+                    <div class="icon-box">ðŸ§‚</div>
                     <h5 class="card-title text-muted text-uppercase small ls-1">Salinitas (TDS)</h5>
                     <div class="mt-3">
                         <span id="tds-value" class="nilai-sensor">0</span>
@@ -74,7 +74,7 @@
 
             <div class="col-md-4 mb-4">
                 <div class="card card-sensor p-4">
-                    <div class="icon-box">📏</div>
+                    <div class="icon-box">ðŸ“?</div>
                     <h5 class="card-title text-muted text-uppercase small ls-1">Ketinggian Air</h5>
                     <div class="mt-3">
                         <span id="water-value" class="nilai-sensor">0</span>
@@ -85,7 +85,7 @@
 
             <div class="col-md-4 mb-4">
                 <div class="card card-sensor p-4">
-                    <div class="icon-box">🚪</div>
+                    <div class="icon-box">ðŸšª</div>
                     <h5 class="card-title text-muted text-uppercase small ls-1">Status Pintu</h5>
                     <div class="mt-3">
                         <span id="door-status" class="status-badge bg-secondary text-white">-</span>
@@ -122,22 +122,21 @@
                         // 2. Update Angka Air
                         document.getElementById('water-value').innerText = data.water_level;
 
-                        // 3. Update Status Pintu & Warnanya
-                        let doorBadge = document.getElementById('door-status');
-                        doorBadge.innerText = data.door_status;
+                        // 3. Update Status Pintu & Warnanya (Logika Baru 0/1)
+						let doorBadge = document.getElementById('door-status');
+						let rawStatus = data.door_status; // Arduino mengirim "1" atau "0"
 
-                        // Logika warna pintu
-                        // Hapus kelas warna lama
-                        doorBadge.classList.remove('bg-success', 'bg-danger', 'bg-secondary');
+						// Hapus kelas warna lama
+						doorBadge.classList.remove('bg-success', 'bg-danger', 'bg-secondary');
 
-                        // Jika status mengandung kata OPEN atau TERBUKA (huruf besar/kecil gak masalah)
-                        let statusText = data.door_status.toUpperCase();
-                        if(statusText.includes('OPEN') || statusText.includes('TERBUKA')) {
-                            doorBadge.classList.add('bg-success'); // Hijau
-                        } else {
-                            doorBadge.classList.add('bg-danger'); // Merah
-                        }
-
+						// Logika Penerjemah: 1 = Terbuka, 0 = Tertutup
+						if(rawStatus == 1) {
+    					doorBadge.innerText = "TERBUKA";       // Ubah angka jadi Teks
+    					doorBadge.classList.add('bg-success'); // Warna Hijau
+						} else {
+    					doorBadge.innerText = "TERTUTUP";      // Ubah angka jadi Teks
+    					doorBadge.classList.add('bg-danger');  // Warna Merah
+						}
                         // 4. Update Waktu
                         let waktu = new Date(data.created_at).toLocaleString('id-ID', {
                             day: 'numeric', month: 'long', year: 'numeric',
