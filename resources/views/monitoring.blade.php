@@ -110,6 +110,7 @@
             // Tampilkan loading kecil (opsional)
             // document.getElementById('loading-indicator').style.display = 'inline-block';
 
+      function updateDashboard() {
             // Minta data ke Server
             fetch('/api/sensor-terbaru')
                 .then(response => response.json())
@@ -122,21 +123,23 @@
                         // 2. Update Angka Air
                         document.getElementById('water-value').innerText = data.water_level;
 
-                        // 3. Update Status Pintu & Warnanya (Logika Baru 0/1)
-						let doorBadge = document.getElementById('door-status');
-						let rawStatus = data.door_status; // Arduino mengirim "1" atau "0"
+                        // 3. Update Status Pintu (Logika Baru 0/1)
+                        let doorBadge = document.getElementById('door-status');
+                        let rawStatus = data.door_status; // Arduino mengirim "1" atau "0"
 
-						// Hapus kelas warna lama
-						doorBadge.classList.remove('bg-success', 'bg-danger', 'bg-secondary');
+                        // Hapus kelas warna lama
+                        doorBadge.classList.remove('bg-success', 'bg-danger', 'bg-secondary');
 
-						// Logika Penerjemah: 1 = Terbuka, 0 = Tertutup
-						if(rawStatus == 1) {
-    					doorBadge.innerText = "TERBUKA";       // Ubah angka jadi Teks
-    					doorBadge.classList.add('bg-success'); // Warna Hijau
-						} else {
-    					doorBadge.innerText = "TERTUTUP";      // Ubah angka jadi Teks
-    					doorBadge.classList.add('bg-danger');  // Warna Merah
-						}
+                        // Logika Penerjemah: 1 = Terbuka, 0 = Tertutup
+                        // Kita gunakan == agar string "1" dan angka 1 dianggap sama
+                        if(rawStatus == 1) {
+                            doorBadge.innerText = "TERBUKA";       // Ubah angka jadi Teks
+                            doorBadge.classList.add('bg-success'); // Warna Hijau
+                        } else {
+                            doorBadge.innerText = "TERTUTUP";      // Ubah angka jadi Teks
+                            doorBadge.classList.add('bg-danger');  // Warna Merah
+                        }
+
                         // 4. Update Waktu
                         let waktu = new Date(data.created_at).toLocaleString('id-ID', {
                             day: 'numeric', month: 'long', year: 'numeric',
