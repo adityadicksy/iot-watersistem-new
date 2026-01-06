@@ -110,7 +110,6 @@
             // Tampilkan loading kecil (opsional)
             // document.getElementById('loading-indicator').style.display = 'inline-block';
 
-      function updateDashboard() {
             // Minta data ke Server
             fetch('/api/sensor-terbaru')
                 .then(response => response.json())
